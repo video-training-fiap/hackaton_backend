@@ -35,8 +35,8 @@ jobs:
             - uses: actions/chekout@v3
               name: Checkout projet
             - name: Download archive
-            uses: actions/download-artifact@v3
-            witth:
+              uses: actions/download-artifact@v3
+              witth:
               path: staging
             -name: Display folder
              run: ls -R
