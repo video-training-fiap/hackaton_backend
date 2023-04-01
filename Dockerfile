@@ -5,11 +5,11 @@ FROM openjdk:11
 COPY . /usr/src/app
 # Defina as variáveis de ambiente para comunicação com o banco de dados
 
-ENV DB_HOSTNAME=localhost \
- DB_PORT=5432 \
-  DB_NAME=my_db \
-  DB_USERNAME=my_user \
-  DB_PASSWORD=my_password
+ENV DB_HOSTNAME=hackatonprod.cyekrdho7kb5.us-east-1.rds.amazonaws.com \
+ DB_PORT=3306 \
+  DB_NAME=hackaton \
+  DB_USERNAME=admin \
+  DB_PASSWORD=hackatonprod1664
 
  # Defina o diretório de trabalho
 
