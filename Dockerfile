@@ -1,5 +1,5 @@
-# Use a imagem do OpenJDK 11 como base
-FROM openjdk:11
+# Use a imagem do OpenJDK 17 como base
+FROM openjdk:17
 
  # Copie o código-fonte da sua aplicação para o contêiner
 COPY . /usr/src/app
