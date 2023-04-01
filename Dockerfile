@@ -1,24 +1,13 @@
-# Use a imagem do OpenJDK 17 como base
-FROM openjdk:17-oracle
+FROM eclipse-temurin:17-jdk-jammy as builder
+WORKDIR /opt/app
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
+COPY ./src ./src
+RUN ./mvnw clean install
 
- # Copie o código-fonte da sua aplicação para o contêiner
-COPY . /usr/src/app
-# Defina as variáveis de ambiente para comunicação com o banco de dados
-
-ENV DB_HOSTNAME=hackatonprod.cyekrdho7kb5.us-east-1.rds.amazonaws.com \
- DB_PORT=3306 \
-  DB_NAME=hackaton \
-  DB_USERNAME=admin \
-  DB_PASSWORD=hackatonprod1664
-
- # Defina o diretório de trabalho
-
- WORKDIR /usr/src/app
-
-# Compile a aplicação
-
-RUN ./gradlew build
-
-# Execute a aplicação quando o contêiner iniciar
-
-CMD ["java", "-jar", "/usr/src/app/build/libs/my-app.jar"]
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /opt/app
+EXPOSE 8080
+COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
+ENTRYPOINT ["java", "-jar", "/opt/app/*.jar" ]
