@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install xargs
+        run: sudo apt-get install -y findutils
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Configure AWS credentials
