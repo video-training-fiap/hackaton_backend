@@ -32,11 +32,11 @@ jobs:
         needs: build
         runs-on: ubuntu-latest
         steps:
-          - uses: actions/chekout@v3
-            name: Checkout projet
-          - name: Download archive
+            - uses: actions/chekout@v3
+              name: Checkout projet
+            - name: Download archive
             uses: actions/download-artifact@v3
             witth:
               path: staging
-          -name: Display folder
-           run: ls -R
+            -name: Display folder
+             run: ls -R
