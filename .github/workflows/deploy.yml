@@ -9,7 +9,7 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REGISTRY: 117369304772.dkr.ecr.us-east-1.amazonaws.com
-  IMAGE_NAME: my-app
+  IMAGE_NAME: hackaton_fiap-repo
   TAG: latest
 
 jobs:
