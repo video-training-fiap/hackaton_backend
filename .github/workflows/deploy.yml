@@ -1,5 +1,4 @@
 name: Deploy workflow
-
 run-name: Deploy Application
 on:
      push:
@@ -37,6 +36,6 @@ jobs:
             - name: Download archive
               uses: actions/download-artifact@v3
               with:
-              path: staging
-            -name: Display folder
-             run: ls -R
+                path: staging
+            - name: Display folder
+              run: ls -R

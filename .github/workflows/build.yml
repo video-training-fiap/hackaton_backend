@@ -1,5 +1,5 @@
 name: Build and Appliction
-run-nme: Build and test workflow
+run-name: Build and test workflow
 
 on:
     push:
