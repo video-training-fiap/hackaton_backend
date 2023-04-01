@@ -2,10 +2,10 @@ name: Deploy workflow
 
 run-name: Deploy Application
 on:
-  push:
-  pull_request:
-    types:
-      - closed
+     push:
+     pull_request:
+         types:
+             - closed
 
 jobs:
     build:
@@ -18,25 +18,25 @@ jobs:
           with:
             distribution: 'temurin'
             java-version: 17
-        - name: Run test and builddind
+        - name: Run test and building
           run: ./mvnw clean test compile war:war
         - name: Moving war
           run: mkdir staging && cp target/*.war staging
         - name: Upload archive
-          uses: actions/uplod-artifact@v3
+          uses: actions/upload-artifact@v3
           with:
             name: Package
             path: staging
 
     deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/chekout@v3
-        name: Checkout projet
-        - name: Download archive
-        users: actions/download-artifact@v3
-        witth:
-          path: staging
-        - Display folder
-          run: ls -R
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/chekout@v3
+            name: Checkout projet
+          - name: Download archive
+            uses: actions/download-artifact@v3
+            witth:
+              path: staging
+          -name: Display folder
+           run: ls -R
