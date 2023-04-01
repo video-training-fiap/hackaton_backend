@@ -11,7 +11,7 @@ jobs:
     build:
       runs-on: ubuntu-latest
       steps:
-        - users: actions/checkout@v3
+        - uses: actions/checkout@v3
           name: Checkout project
         - uses: actions/setup-java2v3
           name: Setup Java
@@ -36,7 +36,7 @@ jobs:
               name: Checkout projet
             - name: Download archive
               uses: actions/download-artifact@v3
-              witth:
+              with:
               path: staging
             -name: Display folder
              run: ls -R
