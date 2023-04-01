@@ -1,5 +1,5 @@
 # Use a imagem do OpenJDK 17 como base
-FROM openjdk:17
+FROM openjdk:17-oracle
 
  # Copie o código-fonte da sua aplicação para o contêiner
 COPY . /usr/src/app
