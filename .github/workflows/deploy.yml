@@ -1,41 +1,43 @@
-name: Deploy workflow
-run-name: Deploy Application
+name: Push to ECR
+
 on:
-     push:
-     pull_request:
-         types:
-             - closed
+  push:
+  pull_request:
+    types:
+      - closed
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REGISTRY: 117369304772.dkr.ecr.us-east-1.amazonaws.com
+  IMAGE_NAME: my-app
+  TAG: latest
 
 jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-          name: Checkout project
-        - uses: actions/setup-java2v3
-          name: Setup Java
-          with:
-            distribution: 'temurin'
-            java-version: 17
-        - name: Run test and building
-          run: ./mvnw clean test compile war:war
-        - name: Moving war
-          run: mkdir staging && cp target/*.war staging
-        - name: Upload archive
-          uses: actions/upload-artifact@v3
-          with:
-            name: Package
-            path: staging
+  push-to-ecr:
+    runs-on: ubuntu-latest
 
-    deploy:
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/chekout@v3
-              name: Checkout projet
-            - name: Download archive
-              uses: actions/download-artifact@v3
-              with:
-                path: staging
-            - name: Display folder
-              run: ls -R
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+      - name: Build Docker image
+        id: build-image
+        run: |
+          docker build -t ${{ env.ECR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} .
+      - name: Tag Docker image
+        id: tag-image
+        run: |
+          docker tag ${{ env.ECR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} ${{ env.ECR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+      - name: Push Docker image
+        id: push-image
+        run: |
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
